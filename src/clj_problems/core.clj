@@ -24,15 +24,16 @@
 
 ;; 168
 
-(defn problem168
-  ;(let [build-row-fn (fn [] (let [tick (atom -1)] #(problem168 f 0 (swap! tick inc))))]
-  ; (repeatedly (build-row-fn))
-  ([f] (problem168 f 0 0))
-  ([f m n] (lazy-seq
-             (let [resp (cons (f m n) (problem168 f m (inc n)))])
-             ))
-  ([f m n s t] (take s (map #(take t %) (f m n)))))
+(defn build-lazy-row [f l r]
+  (lazy-seq (cons (f l r) (build-lazy-row f l (inc r)))))
 
+(defn build-lazy-columns [row-builder index]
+  (lazy-seq (cons (row-builder index) (build-lazy-columns row-builder (inc index)))))
+
+(defn problem168
+  ([f] (build-lazy-columns #(build-lazy-row f % 0) 0))
+  ([f m n] )
+  ([f m n s t] ))
 
 (defn run-168-tests [mfn]
   (= (take 5 (map #(take 6 %) (mfn str)))
