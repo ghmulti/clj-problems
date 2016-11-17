@@ -69,19 +69,39 @@
        [30 36 42 48 54 60 66]
        [35 42 49 56 63 70 77]])
    ]
-  ;;
+;;
 
 
-  ;; 55
+;; 55
 
-  (defn problem55 [coll]
-    (reduce #(update-in %1 [%2] (fnil inc 0)) {} coll)))
+(defn problem55 [coll]
+  (reduce #(update-in %1 [%2] (fnil inc 0)) {} coll)))
 
 (defn run-55-tests []
   [
    (= (problem55 [1 1 2 3 2 1 1]) {1 4, 2 2, 3 1})
    (= (problem55 [:b :a :b :a :b]) {:a 2, :b 3})
    (= (problem55 '([1 2] [1 3] [1 3])) {[1 2] 1, [1 3] 2})
+   ])
+
+;;
+
+
+;; 56
+
+(defn problem56 [coll]
+  (loop [[x & xs] coll
+         seen []]
+    (if x
+      (if (some #{x} seen) (recur xs seen) (recur xs (conj seen x)))
+      seen)))
+
+(defn run-56-tests []
+  [
+   (= (problem56 [1 2 1 3 1 2 4]) [1 2 3 4])
+   (= (problem56 [:a :a :b :b :c :c]) [:a :b :c])
+   (= (problem56 '([2 4] [1 2] [1 3] [1 3])) '([2 4] [1 2] [1 3]))
+   (= (problem56 (range 50)) (range 50))
    ])
 
 ;;
